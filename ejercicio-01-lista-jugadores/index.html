@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+	<!--
+		Proyecto: Real Madrid con JSON
+		Ejercicio 1:
+		- Lee un archivo JSON mediante fetch().
+		- Convierte la respuesta a un array de objetos JavaScript con response.json().
+		- Genera dinámicamente elementos <li> dentro de una lista ordenada.
+	-->
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Ejercicio 1 - Lista de jugadores con JS</title>
+	<title>Ejercicio 1 - Lista de jugadores del Real Madrid con JSON</title>
 	<style>
+		/* Estilos generales de la página. */
 		body {
 			margin: 0;
 			font-family: Arial, Helvetica, sans-serif;
@@ -18,6 +26,7 @@
 			box-sizing: border-box;
 		}
 
+		/* Contenedor principal del ejercicio. */
 		main {
 			width: 100%;
 			max-width: 42rem;
@@ -36,6 +45,7 @@
 			line-height: 1.5;
 		}
 
+		/* Zona donde se mostrará la lista creada con JavaScript. */
 		#display {
 			margin-top: 1rem;
 			padding: 1rem;
@@ -43,6 +53,7 @@
 			background: #f8fafc;
 			border: 1px solid #cbd5e1;
 		}
+		/* Botón que dispara la carga del JSON. */
 		button {
 			padding: 0.85rem 1.2rem;
 			border: none;
@@ -58,6 +69,7 @@
 			background: #1d4ed8;
 		}
 
+		/* Enlace para volver al índice del proyecto. */
 		.volver {
 			display: inline-block;
 			margin-top: 1rem;
@@ -76,10 +88,11 @@
 </head>
 <body>
 	<main>
-		<h1>Ejercicio 1: lista de jugadores con JS</h1>
-		<p>Lista de jugadores del Real Madrid.</p>
+		<h1>Ejercicio 1: lista de jugadores del Real Madrid con JSON</h1>
+		<p>Este ejemplo carga los datos desde un archivo JSON y crea dinámicamente un elemento de lista por cada jugador.</p>
 		<button id="cargarlista" type="button">Cargar lista de jugadores</button>
 		<div id="display">
+			<!-- La lista empieza vacía. JavaScript insertará aquí los <li>. -->
 			<ol id="lista-jugadores">
 
 			</ol>
@@ -87,36 +100,42 @@
 		<a class="volver" href="../index.html">Volver al índice</a>
 	</main>
 	<script>
-		// Asociamos el click del boton con la funcion que carga la lista.
+		// Asociamos el click del botón con la función principal del ejercicio.
 		document.getElementById("cargarlista").addEventListener("click", cargarLista);
 
-		// Esta funcion lee el JSON y genera dinamicamente los <li> de jugadores.
-		function cargarLista(){
+		/*
+			Flujo del ejercicio:
+			1. Hacemos una petición HTTP al archivo jugadores.json.
+			2. Convertimos la respuesta a un array de objetos JavaScript.
+			3. Dentro del bloque .then(...) creamos todos los nodos de la lista.
+			4. Si la carga falla, mostramos el error en consola.
+		*/
+		function cargarLista() {
 			fetch("jugadores.json")
 				.then(function(respuesta) {
 					return respuesta.json();
 				})
 				.then(function(jugadores) {
-					// Vaciamos la lista para no duplicar elementos en cada click.
+					// Vaciamos la lista para evitar elementos duplicados si se pulsa varias veces.
 					document.getElementById("lista-jugadores").innerHTML = "";
 
-					// Recorremos el array para crear un <li> por jugador.
+					// Recorremos el array de objetos y creamos un <li> por cada jugador.
 					for (let i = 0; i < jugadores.length; i++) {
-						// Creamos un nuevo nodo de tipo <li>.
+						// Creamos el nodo de lista en memoria.
 						let nuevoLi = document.createElement("li");
-						// Aplicamos estilos en linea a cada elemento creado.
+						// Añadimos estilos inline para que cada jugador quede visualmente separado.
 						nuevoLi.setAttribute("style", "padding: 0.5rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0.75rem; margin-bottom: 0.5rem;");
-						// Insertamos el nombre del jugador en el <li>.
+						// Extraemos y mostramos la propiedad nombre del objeto actual.
 						nuevoLi.innerHTML = jugadores[i].nombre;
-						// Anadimos el <li> al <ol id="lista-jugadores">.
+						// Insertamos el nuevo <li> dentro de la lista ordenada del documento.
 						document.getElementById("lista-jugadores").appendChild(nuevoLi);
 					}
 				})
 				.catch(function(error) {
+					// Este bloque solo se ejecuta si la petición o el parseo del JSON fallan.
 					console.error("Error al cargar jugadores.json:", error);
 				});
 		}
-
 	</script>
 </body>
 </html>
